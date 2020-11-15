@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import { validate } from "../utils/functions";
-import { StyledButton } from "../components";
+import { validate } from "@/utils";
+import { StyledButton, ErrorMessage } from "@/components";
 
 export const SignupScreen = () => {
   const [authenticationData, setAuthenticationData] = useState({
@@ -14,21 +14,27 @@ export const SignupScreen = () => {
 
   const [submittable, setSubmittable] = useState(false);
 
+  const [warnings, setWarnings] = useState({
+    email: null,
+    password: null,
+    confirmPassword: null,
+  });
+
   const onSubmit = () => console.log("the signup state is", authenticationData);
 
   const onChangeEmail = (text) => {
     setAuthenticationData({ ...authenticationData, email: text });
-    validate(text, password, setSubmittable, confirmPassword);
+    validate(text, password, setSubmittable, setWarnings, confirmPassword);
   };
 
   const onChangePassword = (text) => {
     setAuthenticationData({ ...authenticationData, password: text });
-    validate(email, text, setSubmittable, confirmPassword);
+    validate(email, text, setSubmittable, setWarnings, confirmPassword);
   };
 
   const onChangeConfirmPassword = (text) => {
     setAuthenticationData({ ...authenticationData, confirmPassword: text });
-    validate(email, password, setSubmittable, text);
+    validate(email, password, setSubmittable, setWarnings, text);
   };
 
   return (
@@ -41,6 +47,9 @@ export const SignupScreen = () => {
         placeholder="email@email.com"
         onChangeText={onChangeEmail}
       ></TextInput>
+
+      <ErrorMessage show={!!warnings.email} text={warnings.email} />
+
       <Text style={styles.text}>Contraseña:</Text>
       <TextInput
         secureTextEntry={true}
@@ -48,6 +57,9 @@ export const SignupScreen = () => {
         placeholder="******"
         onChangeText={onChangePassword}
       ></TextInput>
+
+      <ErrorMessage show={!!warnings.password} text={warnings.password} />
+
       <Text style={styles.text}>Repeti la contraseña:</Text>
       <TextInput
         secureTextEntry={true}
@@ -55,8 +67,15 @@ export const SignupScreen = () => {
         placeholder="******"
         onChangeText={onChangeConfirmPassword}
       ></TextInput>
+
+      <ErrorMessage
+        show={!!warnings.confirmPassword}
+        text={warnings.confirmPassword}
+      />
+
       <StyledButton
         disabled={!submittable}
+        style={styles.submitButton}
         onPress={onSubmit}
         text="Comenzar"
       />
@@ -74,5 +93,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     margin: 25,
     textAlign: "center",
+  },
+  submitButton: {
+    width: "50%",
   },
 });

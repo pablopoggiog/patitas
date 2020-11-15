@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 
-export const StyledButton = ({ onPress, text, disabled }) => (
+export const StyledButton = ({ onPress, text, disabled, style }) => (
   <TouchableOpacity
     disabled={disabled}
-    style={disabled ? styles.disabledButton : styles.enabledButton}
+    style={[disabled ? styles.disabledButton : styles.enabledButton, style]}
     onPress={onPress}
   >
     <Text style={styles.buttonText}>{text}</Text>
@@ -13,18 +13,20 @@ export const StyledButton = ({ onPress, text, disabled }) => (
 
 const styles = StyleSheet.create({
   enabledButton: {
-    marginTop: 90,
-    width: "50%",
+    margin: 20,
+    width: "30%",
     backgroundColor: "#007BFF",
     borderRadius: 20,
     color: "white",
+    elevation: 12,
   },
   disabledButton: {
-    marginTop: 90,
-    width: "50%",
+    margin: 20,
+    width: "30%",
     backgroundColor: "grey",
     borderRadius: 20,
     color: "white",
+    elevation: 12,
   },
   buttonText: {
     color: "white",
