@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  Keyboard,
+} from "react-native";
 import { validate } from "@/utils";
 import { StyledButton, ErrorMessage } from "@/components";
+import background from "@/assets/1.jpg";
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ navigation: { navigate } }) => {
   const [authenticationData, setAuthenticationData] = useState({
     email: "",
     password: "",
@@ -15,7 +23,11 @@ export const LoginScreen = () => {
 
   const [warnings, setWarnings] = useState({ email: null, password: null });
 
-  const onSubmit = () => console.log("the login state is", authenticationData);
+  const onSubmit = () => {
+    console.log("the login state is", authenticationData);
+    navigate("Lista");
+    Keyboard.dismiss();
+  };
 
   const onChangeEmail = (text) => {
     setAuthenticationData({ ...authenticationData, email: text });
@@ -29,6 +41,7 @@ export const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Image style={styles.backgroundImage} source={background}></Image>
       <Text style={styles.text}>Tu email:</Text>
 
       <TextInput
@@ -75,5 +88,13 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     width: "50%",
+  },
+  backgroundImage: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    opacity: 0.05,
   },
 });

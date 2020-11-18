@@ -1,7 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  Keyboard,
+} from "react-native";
 import { validate } from "@/utils";
 import { StyledButton, ErrorMessage } from "@/components";
+import background from "@/assets/1.jpg";
 
 export const SignupScreen = () => {
   const [authenticationData, setAuthenticationData] = useState({
@@ -20,7 +28,10 @@ export const SignupScreen = () => {
     confirmPassword: null,
   });
 
-  const onSubmit = () => console.log("the signup state is", authenticationData);
+  const onSubmit = () => {
+    console.log("the signup state is", authenticationData);
+    Keyboard.dismiss();
+  };
 
   const onChangeEmail = (text) => {
     setAuthenticationData({ ...authenticationData, email: text });
@@ -39,6 +50,7 @@ export const SignupScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Image style={styles.backgroundImage} source={background}></Image>
       <Text style={styles.text}>Tu email:</Text>
       <TextInput
         keyboardType="email-address"
@@ -96,5 +108,13 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     width: "50%",
+  },
+  backgroundImage: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    opacity: 0.05,
   },
 });

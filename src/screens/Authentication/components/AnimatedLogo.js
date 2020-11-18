@@ -43,7 +43,7 @@ export const AnimatedLogo = () => {
     <Animated.View style={{ transform: [{ scale }], opacity: fadeIn }}>
       <Image
         width="100px"
-        source={require("../../../assets/paw.png")}
+        source={require("@/assets/paw.png")}
         style={{ width: 70, height: 70, marginBottom: 70 }}
       />
     </Animated.View>

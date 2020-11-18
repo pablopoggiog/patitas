@@ -1,11 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { StyledButton } from "@/components";
+import background from "@/assets/1.jpg";
 import { AnimatedLogo } from "./components/AnimatedLogo";
 
 export const AuthenticationScreen = ({ navigation: { navigate } }) => {
   return (
     <View style={styles.container}>
+      <Image style={styles.backgroundImage} source={background}></Image>
       <AnimatedLogo />
 
       <Text style={styles.text}>Te extrañamos!</Text>
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: "40%",
+    paddingTop: "30%",
   },
   text: {
     fontSize: 20,
@@ -42,11 +44,19 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: "row",
-    marginTop: 100,
+    paddingTop: "20%",
   },
   bottomText: {
     flexDirection: "row",
-    paddingTop: "40%",
+    paddingTop: "20%",
   },
   link: { color: "#007BFF" },
+  backgroundImage: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    opacity: 0.05,
+  },
 });
