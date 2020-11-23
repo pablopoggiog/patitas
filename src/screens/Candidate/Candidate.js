@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import background from "@/assets/1.jpg";
 import { data } from "@/utils";
 
-export const CandidateScreen = ({ navigate, route }) => {
+export const CandidateScreen = ({ navigation: { navigate }, route }) => {
   const { id } = route.params;
 
   const { photo, name, description } = data.find(
@@ -23,7 +23,15 @@ export const CandidateScreen = ({ navigate, route }) => {
       <View style={styles.bottomText}>
         <Text>Queres conocerlo? </Text>
 
-        <Text onPress={() => navigate("Contacto")} style={styles.link}>
+        <Text
+          onPress={() => {
+            // navigate("Chat"), { name: "asd" };
+            console.log(
+              "to be defined, most probably a deeplink to whatsapp while native chat isn't available"
+            );
+          }}
+          style={styles.link}
+        >
           Chatear con el dueño
         </Text>
       </View>
