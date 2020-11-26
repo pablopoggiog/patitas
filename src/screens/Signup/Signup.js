@@ -7,18 +7,21 @@ import {
   Image,
   Keyboard,
 } from "react-native";
+import { CommonActions } from "@react-navigation/native";
 import { validate } from "@/utils";
 import { StyledButton, ErrorMessage } from "@/components";
+import { firebase } from "@/firebase/config";
 import background from "@/assets/1.jpg";
 
-export const SignupScreen = () => {
+export const SignupScreen = ({ navigation: { navigate, dispatch } }) => {
   const [authenticationData, setAuthenticationData] = useState({
+    fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const { email, password, confirmPassword } = authenticationData;
+  const { fullName, email, password, confirmPassword } = authenticationData;
 
   const [submittable, setSubmittable] = useState(false);
 
@@ -32,6 +35,9 @@ export const SignupScreen = () => {
     console.log("the signup state is", authenticationData);
     Keyboard.dismiss();
   };
+
+  const onChangeFullName = (text) =>
+    setAuthenticationData({ ...authenticationData, fullName: text });
 
   const onChangeEmail = (text) => {
     setAuthenticationData({ ...authenticationData, email: text });
@@ -48,9 +54,65 @@ export const SignupScreen = () => {
     validate(email, password, setSubmittable, setWarnings, text);
   };
 
+  const onRegisterPress = () => {
+    if (password !== confirmPassword) {
+      alert("Passwords don't match.");
+      return;
+    }
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((response) => {
+        const uid = response.user.uid;
+        const data = {
+          id: uid,
+          email,
+          fullName,
+        };
+        const usersRef = firebase.firestore().collection("users");
+        usersRef
+          .doc(uid)
+          .set(data)
+          .then(() => {
+            dispatch(
+              CommonActions.reset({
+                index: 1,
+                routes: [
+                  {
+                    name: "Patitas",
+                  },
+                  {
+                    name: "Lista",
+                    params: {
+                      user: data,
+                    },
+                  },
+                ],
+              })
+            );
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
+  const onFooterLinkPress = () => navigate("Ingresar");
+
   return (
     <View style={styles.container}>
       <Image style={styles.backgroundImage} source={background}></Image>
+
+      <Text style={styles.text}>Tu nombre completo:</Text>
+      <TextInput
+        style={styles.text}
+        placeholder="Pablo Gonzalez"
+        onChangeText={onChangeFullName}
+      ></TextInput>
+
       <Text style={styles.text}>Tu email:</Text>
       <TextInput
         keyboardType="email-address"
@@ -88,9 +150,18 @@ export const SignupScreen = () => {
       <StyledButton
         disabled={!submittable}
         style={styles.submitButton}
-        onPress={onSubmit}
+        onPress={onRegisterPress}
         text="Comenzar"
       />
+
+      <View style={styles.footerView}>
+        <Text style={styles.footerText}>
+          Ya tenés una cuenta?{" "}
+          <Text onPress={onFooterLinkPress} style={styles.link}>
+            Ingresar
+          </Text>
+        </Text>
+      </View>
     </View>
   );
 };
@@ -103,7 +174,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    margin: 25,
+    margin: 5,
     textAlign: "center",
   },
   submitButton: {
@@ -117,4 +188,5 @@ const styles = StyleSheet.create({
     right: 0,
     opacity: 0.05,
   },
+  link: { color: "#007BFF" },
 });

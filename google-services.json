@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "752907889610",
+    "firebase_url": "https://patitas-mobile.firebaseio.com",
+    "project_id": "patitas-mobile",
+    "storage_bucket": "patitas-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752907889610:android:67c3f55f864ffff0983d33",
+        "android_client_info": {
+          "package_name": "com.reactnativefirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752907889610-4ti9kqfpp3ebmdnb9eml4huhc3qg9ebd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA01iuJTtw8owaUIB2Ukkz9jSBeOi5ZBpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752907889610-4ti9kqfpp3ebmdnb9eml4huhc3qg9ebd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

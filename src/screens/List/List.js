@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Image, ScrollView } from "react-native";
 import { ListItem } from "@/components";
 import background from "@/assets/1.jpg";
 import { data } from "@/utils";
 
-export const ListScreen = ({ navigation: { navigate } }) => {
+export const ListScreen = ({ navigation: { navigate }, user}) => {
+  useEffect(() => {
+    console.log("DESDE LISTA EL USER ES", user);
+  }, []);
   return (
     <ScrollView>
       <View style={styles.container}>

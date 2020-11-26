@@ -7,11 +7,12 @@ import {
   Image,
   Keyboard,
 } from "react-native";
+import { CommonActions } from "@react-navigation/native";
 import { validate } from "@/utils";
 import { StyledButton, ErrorMessage } from "@/components";
+import { firebase } from "@/firebase/config";
 import background from "@/assets/1.jpg";
-
-export const LoginScreen = ({ navigation: { navigate } }) => {
+export const LoginScreen = ({ navigation: { navigate, dispatch } }) => {
   const [authenticationData, setAuthenticationData] = useState({
     email: "",
     password: "",
@@ -24,9 +25,46 @@ export const LoginScreen = ({ navigation: { navigate } }) => {
   const [warnings, setWarnings] = useState({ email: null, password: null });
 
   const onSubmit = () => {
-    console.log("the login state is", authenticationData);
-    navigate("Lista");
-    Keyboard.dismiss();
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((response) => {
+        const uid = response.user.uid;
+        const usersRef = firebase.firestore().collection("users");
+        usersRef
+          .doc(uid)
+          .get()
+          .then((firestoreDocument) => {
+            if (!firestoreDocument.exists) {
+              alert("User does not exist anymore.");
+              return;
+            }
+            const user = firestoreDocument.data();
+            console.log("user es,", user);
+            dispatch(
+              CommonActions.reset({
+                index: 1,
+                routes: [
+                  {
+                    name: "Patitas",
+                  },
+                  {
+                    name: "Lista",
+                    params: {
+                      user,
+                    },
+                  },
+                ],
+              })
+            );
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   const onChangeEmail = (text) => {
@@ -38,6 +76,8 @@ export const LoginScreen = ({ navigation: { navigate } }) => {
     setAuthenticationData({ ...authenticationData, password: text });
     validate(email, text, setSubmittable, setWarnings);
   };
+
+  const onFooterLinkPress = () => navigate("Registrate");
 
   return (
     <View style={styles.container}>
@@ -71,6 +111,15 @@ export const LoginScreen = ({ navigation: { navigate } }) => {
         onPress={onSubmit}
         text="Entrar"
       />
+
+      <View style={styles.footerView}>
+        <Text>
+          Aun no tenés una cuenta?{" "}
+          <Text onPress={onFooterLinkPress} style={styles.link}>
+            Registrate
+          </Text>
+        </Text>
+      </View>
     </View>
   );
 };
@@ -97,4 +146,5 @@ const styles = StyleSheet.create({
     right: 0,
     opacity: 0.05,
   },
+  link: { color: "#007BFF" },
 });
