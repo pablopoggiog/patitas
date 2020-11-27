@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Image,
-  Keyboard,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, Image } from "react-native";
 import { CommonActions } from "@react-navigation/native";
 import { validate } from "@/utils";
 import { StyledButton, ErrorMessage } from "@/components";
@@ -31,11 +24,6 @@ export const SignupScreen = ({ navigation: { navigate, dispatch } }) => {
     confirmPassword: null,
   });
 
-  const onSubmit = () => {
-    console.log("the signup state is", authenticationData);
-    Keyboard.dismiss();
-  };
-
   const onChangeFullName = (text) =>
     setAuthenticationData({ ...authenticationData, fullName: text });
 
@@ -54,7 +42,7 @@ export const SignupScreen = ({ navigation: { navigate, dispatch } }) => {
     validate(email, password, setSubmittable, setWarnings, text);
   };
 
-  const onRegisterPress = () => {
+  const onSubmit = () => {
     if (password !== confirmPassword) {
       alert("Passwords don't match.");
       return;
@@ -150,7 +138,7 @@ export const SignupScreen = ({ navigation: { navigate, dispatch } }) => {
       <StyledButton
         disabled={!submittable}
         style={styles.submitButton}
-        onPress={onRegisterPress}
+        onPress={onSubmit}
         text="Comenzar"
       />
 

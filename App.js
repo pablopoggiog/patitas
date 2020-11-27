@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { firebase } from "@/firebase/config";
 import {
@@ -8,7 +8,6 @@ import {
   SignupScreen,
   ListScreen,
   CandidateScreen,
-  // ChatScreen,
 } from "@/screens";
 
 const { Navigator, Screen } = createStackNavigator();
@@ -26,33 +25,18 @@ export default function App() {
           .get()
           .then((document) => {
             const userData = document.data();
-            setLoading(false);
-            console.log("userData es", userData);
             setUser(userData);
+            setLoading(false);
           })
           .catch((error) => {
+            console.log(error);
             setLoading(false);
-            console.log("EL USER dio error, ", error);
           });
       } else {
         setLoading(false);
-        console.log("EL USER NO ESTA");
       }
     });
   }, []);
-
-  // return (
-  //   <NavigationContainer>
-  //     <Navigator>
-  //       <Screen name="Patitas" component={AuthenticationScreen} />
-  //       <Screen name="Ingresar" component={LoginScreen} />
-  //       <Screen name="Registrate" component={SignupScreen} />
-  //       <Screen name="Lista" component={ListScreen} />
-  //       <Screen name="Candidato" component={CandidateScreen} />
-  //       {/* <Screen name="Chat" component={ChatScreen} /> */}
-  //     </Navigator>
-  //   </NavigationContainer>
-  // );
 
   if (loading) return <></>;
 
@@ -77,8 +61,20 @@ export default function App() {
             <Screen name="Candidato" component={CandidateScreen} />
           </>
         )}
-        {/* <Screen name="Chat" component={ChatScreen} /> */}
       </Navigator>
     </NavigationContainer>
   );
 }
+
+// return (
+//   <NavigationContainer>
+//     <Navigator>
+//       <Screen name="Patitas" component={AuthenticationScreen} />
+//       <Screen name="Ingresar" component={LoginScreen} />
+//       <Screen name="Registrate" component={SignupScreen} />
+//       <Screen name="Lista" component={ListScreen} />
+//       <Screen name="Candidato" component={CandidateScreen} />
+//       {/* <Screen name="Chat" component={ChatScreen} /> */}
+//     </Navigator>
+//   </NavigationContainer>
+// );

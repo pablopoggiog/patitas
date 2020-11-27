@@ -40,7 +40,7 @@ export const LoginScreen = ({ navigation: { navigate, dispatch } }) => {
               return;
             }
             const user = firestoreDocument.data();
-            console.log("user es,", user);
+            console.log("the user is,", user);
             dispatch(
               CommonActions.reset({
                 index: 1,
