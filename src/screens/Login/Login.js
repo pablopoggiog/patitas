@@ -1,22 +1,19 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Image,
-  Keyboard,
-} from "react-native";
+import React, { useState, useContext } from "react";
+import { View, Text, TextInput, StyleSheet, Image } from "react-native";
 import { CommonActions } from "@react-navigation/native";
 import { validate } from "@/utils";
 import { StyledButton, ErrorMessage } from "@/components";
 import { firebase } from "@/firebase/config";
 import background from "@/assets/1.jpg";
+import { UserContext } from "@/contexts/user";
+
 export const LoginScreen = ({ navigation: { navigate, dispatch } }) => {
   const [authenticationData, setAuthenticationData] = useState({
     email: "",
     password: "",
   });
+
+  const [userId, setUserId] = useContext(UserContext);
 
   const { email, password } = authenticationData;
 
@@ -41,6 +38,7 @@ export const LoginScreen = ({ navigation: { navigate, dispatch } }) => {
             }
             const user = firestoreDocument.data();
             console.log("the user is,", user);
+            setUserId(user.id)
             dispatch(
               CommonActions.reset({
                 index: 1,

@@ -4,3 +4,4 @@ export * from "./Signup";
 export * from "./List";
 export * from "./Candidate";
 export * from "./Chat";
+export * from "./Publisher";

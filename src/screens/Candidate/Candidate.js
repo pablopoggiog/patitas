@@ -1,42 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
+import { Spinner } from "@/components";
 import background from "@/assets/1.jpg";
-import { data } from "@/utils";
+import { fetchCandidate } from "@/firebase/functions";
 
 export const CandidateScreen = ({ navigation: { navigate }, route }) => {
-  const { id } = route.params;
+  const { id, name } = route.params;
 
-  const { photo, name, description } = data.find(
-    (element) => element.id === id
-  );
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
 
-  return (
-    <View style={styles.container}>
-      <Image style={styles.backgroundImage} source={background}></Image>
+  useEffect(() => {
+    fetchCandidate(id, setImage, setDescription);
+  }, [id]);
 
-      <Image style={styles.image} source={photo}></Image>
-
-      <Text style={styles.title}>{name}</Text>
-
-      <Text style={styles.text}>{description}</Text>
-
-      <View style={styles.bottomText}>
-        <Text>Queres conocerlo? </Text>
-
-        <Text
-          onPress={() => {
-            // navigate("Chat"), { name: "asd" };
-            console.log(
-              "to be defined, most probably a deeplink to whatsapp while native chat isn't available"
-            );
-          }}
-          style={styles.link}
-        >
-          Chatear con el dueño
-        </Text>
+  if (!name || !description || !image)
+    return (
+      <View style={styles.container}>
+        <Image style={styles.backgroundImage} source={background}></Image>
+        <Spinner />
       </View>
-    </View>
-  );
+    );
+  else
+    return (
+      <View style={styles.container}>
+        <Image style={styles.backgroundImage} source={background}></Image>
+
+        <Image
+          style={styles.image}
+          source={image ? { uri: image } : background}
+        ></Image>
+
+        <Text style={styles.title}>{name}</Text>
+
+        <Text style={styles.text}>{description}</Text>
+
+        <View style={styles.bottomText}>
+          <Text>Queres conocerlo? </Text>
+
+          <Text
+            onPress={() => {
+              // navigate("Chat"), { name: "asd" };
+              console.log(
+                "to be defined, most probably a deeplink to whatsapp while native chat isn't available"
+              );
+            }}
+            style={styles.link}
+          >
+            Chatear con el dueño
+          </Text>
+        </View>
+      </View>
+    );
 };
 
 const styles = StyleSheet.create({

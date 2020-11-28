@@ -1,14 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
-export const ListItem= ({
-  id,
-  navigate,
-  photo,
-  name,
-  shortDescription,
-}) => {
-  const openElement = () => navigate("Candidato", { id });
+export const ListItem = ({ id, navigate, photo, name, shortDescription }) => {
+  const openElement = () => navigate("Candidato", { id, name });
 
   return (
     <TouchableOpacity onPress={openElement} style={styles.container}>
@@ -16,7 +10,7 @@ export const ListItem= ({
         <Text style={styles.title}>{name}</Text>
         <Text style={styles.text}>{shortDescription}</Text>
       </View>
-      <Image style={styles.image} source={photo}></Image>
+      <Image style={styles.image} source={{ uri: photo }}></Image>
     </TouchableOpacity>
   );
 };
@@ -42,7 +36,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   text: {
-    fontSize: 10,
+    fontSize: 13,
     margin: 15,
     textAlign: "center",
     flex: 1,

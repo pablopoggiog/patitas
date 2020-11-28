@@ -1,26 +1,49 @@
-import React from "react";
-import { View, StyleSheet, Image, ScrollView } from "react-native";
-import { ListItem } from "@/components";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Image, ScrollView, Button } from "react-native";
+import { ListItem, Spinner } from "@/components";
 import background from "@/assets/1.jpg";
-import { data } from "@/utils";
+import { fetchCandidatesList } from "@/firebase/functions";
 
-export const ListScreen = ({ navigation: { navigate } }) => (
-  <ScrollView>
-    <View style={styles.container}>
+export const ListScreen = ({ navigation: { navigate } }) => {
+  const [list, setList] = useState(null);
+
+  useEffect(() => {
+    fetchCandidatesList(setList);
+  }, []);
+
+  return (
+    <View style={{ flex: 1 }}>
       <Image style={styles.backgroundImage} source={background}></Image>
-      {data.map(({ id, photo, name, shortDescription }) => (
-        <ListItem
-          key={id}
-          id={id}
-          navigate={navigate}
-          photo={photo}
-          name={name}
-          shortDescription={shortDescription}
-        />
-      ))}
+      {list ? (
+        <ScrollView style={{ flex: 1 }}>
+          <View style={styles.container}>
+            {Object.entries(list).map(
+              ([id, { image, name, shortDescription }]) => {
+                return (
+                  <ListItem
+                    key={id}
+                    id={id}
+                    navigate={navigate}
+                    photo={image}
+                    name={name}
+                    shortDescription={shortDescription}
+                  />
+                );
+              }
+            )}
+          </View>
+        </ScrollView>
+      ) : (
+        <Spinner />
+      )}
+      <Button
+        style={styles.bottomButton}
+        title="NUEVO"
+        onPress={() => navigate("Nuevo")}
+      ></Button>
     </View>
-  </ScrollView>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -35,5 +58,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     opacity: 0.05,
+  },
+  bottomButton: {
+    position: "absolute",
+    bottom: 0,
+    alignSelf: "flex-end",
   },
 });
